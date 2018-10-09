@@ -144,7 +144,11 @@ $(PATHB)Test_PinGroup_driver$(TARGET_EXTENSION): $(STD_FILES) $(TEST_PINGROUP_SR
 
 TEST_OCGPIO_SRC=$(OCWARE_ROOT)/src/drivers/OcGpio.c $(OCWARE_ROOT)/src/devices/i2cbus.c fake/fake_I2C.c fake/fake_GPIO.c fake/fake_ThreadedISR.c $(OCWARE_ROOT)/src/helpers/memory.c stub/stub_GateMutex.c
 $(PATHB)Test_OcGpio$(TARGET_EXTENSION): $(STD_FILES) $(TEST_OCGPIO_SRC)
-	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $^ -o $@    
+	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $^ -o $@
+
+TEST_OCMP_INA226_SRC=$(OCWARE_ROOT)/src/devices/ocmp_wrappers/ocmp_ina226.c $(OCWARE_ROOT)/src/devices/ina226.c $(OCWARE_ROOT)/src/devices/i2cbus.c fake/fake_GPIO.c fake/fake_I2C.c fake/fake_ThreadedISR.c $(OCWARE_ROOT)/src/post/post_util.c
+$(PATHB)Test_ocmp_ina226$(TARGET_EXTENSION): $(STD_FILES) $(TEST_OCMP_INA226_SRC)
+	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $^ -o $@
 
 # Dummy target to allow us to force rebuild of testresults every time
 FORCE:
