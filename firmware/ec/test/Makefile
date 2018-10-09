@@ -146,6 +146,10 @@ TEST_OCGPIO_SRC=$(OCWARE_ROOT)/src/drivers/OcGpio.c $(OCWARE_ROOT)/src/devices/i
 $(PATHB)Test_OcGpio$(TARGET_EXTENSION): $(STD_FILES) $(TEST_OCGPIO_SRC)
 	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $^ -o $@    
 
+TEST_OCMP_LTC4015_SRC=$(OCWARE_ROOT)/src/devices/ocmp_wrappers/ocmp_ltc4015.c $(OCWARE_ROOT)/src/devices/ltc4015.c $(OCWARE_ROOT)/src/drivers/GpioSX1509.c $(OCWARE_ROOT)/src/devices/sx1509.c $(OCWARE_ROOT)/src/helpers/memory.c $(OCWARE_ROOT)/src/devices/i2cbus.c fake/fake_GPIO.c fake/fake_I2C.c fake/fake_ThreadedISR.c stub/stub_GateMutex.c $(OCWARE_ROOT)/src/post/post_util.c
+$(PATHB)Test_ocmp_ltc4015$(TARGET_EXTENSION): $(STD_FILES) $(TEST_OCMP_LTC4015_SRC)
+	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $^ -lm -o $@
+
 # Dummy target to allow us to force rebuild of testresults every time
 FORCE:
 
