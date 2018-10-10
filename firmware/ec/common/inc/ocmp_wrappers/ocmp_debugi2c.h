@@ -11,8 +11,13 @@
 
 #include "common/inc/global/Framework.h"
 
+#ifdef UT_FRAMEWORK
+extern bool i2c_read(void *driver, void *data);
+extern bool i2c_write(void *driver, void *data);
+#else
 SCHEMA_IMPORT bool i2c_read(void *driver, void *data);
 SCHEMA_IMPORT bool i2c_write(void *driver, void *data);
+#endif
 
 static const Driver OC_I2C = {
     .name = "OC_I2C",
