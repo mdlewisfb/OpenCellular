@@ -21,11 +21,7 @@ typedef union LTC4274_Config {
     };
 } LTC4274_Config;
 
-#ifdef UT_FRAMEWORK
-extern const Driver_fxnTable LTC4274_fxnTable;
-#else
 SCHEMA_IMPORT const Driver_fxnTable LTC4274_fxnTable;
-#endif
 SCHEMA_IMPORT bool LTC4274_reset(void *driver, void *params);
 
 static const Driver LTC4274 = {
