@@ -119,15 +119,15 @@ static ePostCode _init_eeprom(void *driver, const void **config,
                               const void *alert_token)
 {
     Eeprom_Cfg *eeprom = (Eeprom_Cfg *)driver;
-    uint8_t write = 0x01;
-    uint8_t read = 0x00;
+    uint16_t write = 0x01;
+    uint16_t read = 0x00;
 
     eeprom_init(eeprom);
     eeprom_enable_write(eeprom);
-    eeprom_write(eeprom, OC_TEST_ADDRESS, &write, 1);
+    eeprom_write(eeprom, OC_TEST_ADDRESS, &write, 2);
     NOP_DELAY(); /* TODO: the eeprom driver should handle this */
     eeprom_disable_write(eeprom);
-    eeprom_read(eeprom, OC_TEST_ADDRESS, &read, 1);
+    eeprom_read(eeprom, OC_TEST_ADDRESS, &read, 2);
 
     if (write == read) {
         return POST_DEV_CFG_DONE;

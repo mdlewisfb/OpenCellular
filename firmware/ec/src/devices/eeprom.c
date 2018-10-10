@@ -53,6 +53,9 @@ static ReturnStatus i2c_eeprom_read(I2C_Handle i2cHandle,
  **
  *****************************************************************************/
 bool eeprom_init(Eeprom_Cfg *cfg) {
+    if ((cfg == NULL) || (cfg->pin_wp == NULL)) {
+        return false;
+    }
     /* Configure our WP pin (if any) and set to be low (protected) by default */
     if (cfg->pin_wp) {
         OcGpio_configure(cfg->pin_wp,
@@ -60,7 +63,7 @@ bool eeprom_init(Eeprom_Cfg *cfg) {
     }
 
     /* Test communication to the EEPROM */
-    uint8_t test_byte;
+    uint16_t test_byte;
     if (eeprom_read(cfg, 0x00, &test_byte, sizeof(test_byte)) != RETURN_OK) {
         return false;
     }
@@ -84,7 +87,10 @@ ReturnStatus eeprom_read(Eeprom_Cfg *cfg,
                          void *buffer,
                          size_t size)
 {
-    ReturnStatus status = RETURN_OK;
+    ReturnStatus status = RETURN_NOTOK;
+    if (cfg == NULL) {
+        return status;
+    }
     I2C_Handle eepromHandle = i2c_get_handle(cfg->i2c_dev.bus);
     if (!eepromHandle) {
         LOGGER_ERROR("EEPROM:ERROR:: Failed to get I2C Bus for "
@@ -118,7 +124,10 @@ ReturnStatus eeprom_write(const Eeprom_Cfg *cfg,
                           const void *buffer,
                           size_t size)
 {
-    ReturnStatus status = RETURN_OK;
+    ReturnStatus status = RETURN_NOTOK;
+    if (cfg == NULL) {
+        return status;
+    }
     I2C_Handle eepromHandle = i2c_get_handle(cfg->i2c_dev.bus);
     if (!eepromHandle) {
         LOGGER_ERROR("EEPROM:ERROR:: Failed to get I2C Bus for "
@@ -231,6 +240,9 @@ static ReturnStatus i2c_eeprom_read(I2C_Handle i2cHandle,
  *****************************************************************************/
 ReturnStatus eeprom_disable_write(Eeprom_Cfg *cfg)
 {
+    if ((cfg == NULL) || (cfg->pin_wp == NULL)) {
+        return RETURN_NOTOK;
+    }
     if (cfg->pin_wp) {
         OcGpio_write(cfg->pin_wp, WP_ASSERT);
     }
@@ -251,6 +263,9 @@ ReturnStatus eeprom_disable_write(Eeprom_Cfg *cfg)
  *****************************************************************************/
 ReturnStatus eeprom_enable_write(Eeprom_Cfg *cfg)
 {
+    if ((cfg == NULL) || (cfg->pin_wp == NULL)) {
+        return RETURN_NOTOK;
+    }
     if (cfg->pin_wp) {
         OcGpio_write(cfg->pin_wp, WP_DEASSERT);
     }
@@ -297,6 +312,9 @@ ReturnStatus eeprom_read_oc_info(uint8_t * oc_serial)
 ReturnStatus eeprom_read_board_info(const Eeprom_Cfg *cfg, uint8_t * rom_info)
 {
     ReturnStatus status = RETURN_NOTOK;
+    if (cfg == NULL) {
+        return status;
+    }
     uint8_t info_size = 0x00;
     uint16_t eepromOffset = 0x0000;
     switch (cfg->ss) {
@@ -350,6 +368,9 @@ ReturnStatus eeprom_read_device_info_record(const Eeprom_Cfg *cfg,
                                             char * device_info)
 {
     ReturnStatus status = RETURN_NOTOK;
+    if (cfg == NULL) {
+        return status;
+    }
     uint8_t info_size = OC_DEVICE_INFO_SIZE;
     uint16_t eepromOffset = 0x0000;
     switch (cfg->ss) {
@@ -401,6 +422,9 @@ ReturnStatus eeprom_write_device_info_record(Eeprom_Cfg *cfg,
                                              char * device_info)
 {
     ReturnStatus status = RETURN_NOTOK;
+    if (cfg == NULL) {
+        return status;
+    }
     uint8_t info_size = OC_DEVICE_INFO_SIZE;
     uint16_t eepromOffset = 0x0000;
     switch (cfg->ss) {
