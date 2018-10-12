@@ -1,0 +1,28 @@
+node {
+  currentBuild.result = 'SUCCESS'
+    withEnv(["UNITY_ROOT=$HOME/Unity", "TOOLCHAIN=$HOME/gcc-arm-none-eabi"]) {
+      try {
+          stage('Checkout') {
+            step([$class: 'WsCleanup'])
+            echo 'Checking out SCM'
+            checkout scm
+          }
+
+          stage('Static Analysis') {
+              sh 'bash .ci/clang_patch'
+          }
+            
+          stage('Unit Test') {
+              dir ("firmware/ec/test"){ sh 'make ci' }
+          }
+          
+          stage('Firmware Build') {
+            dir ('firmware/ec') { sh 'make all' }
+          }
+
+      } catch (err) {
+        currentBuild.result = 'FAILURE'
+        throw err
+      }
+    }
+}
