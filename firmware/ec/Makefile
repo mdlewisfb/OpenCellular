@@ -83,8 +83,6 @@ all: oc_connect1
 oc_connect1: $(OUT)/OpenCellular.bin
 
 $(OUT)%/compiler.opt $(OUT)%/linker.cmd : %.cfg
-	@echo $(TOOLCHAIN)
-	@echo $(OCWARE_DIR)
 	$(CONFIGURO) -c $(TOOLCHAIN) -t $(TARGET) -p $(PLATFORM) -r release $<
 	cp $(OUT)$(CONFIG)/package/cfg/$*_$(ROV_XS_SUFFIX).rov.xs .
 
