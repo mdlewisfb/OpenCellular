@@ -1,6 +1,6 @@
 node {
   currentBuild.result = 'SUCCESS'
-    withEnv(['UNITY_ROOT=$HOME/Unity', 'TOOLCHAIN=$HOME/gcc-arm-none-eabi', "OCWARE_DIR=./"]) {
+    withEnv(["UNITY_ROOT=$HOME/Unity", "TOOLCHAIN=$HOME/gcc-arm-none-eabi", "OCWARE_DIR=./"]) {
       try {
           stage('Checkout') {
             step([$class: 'WsCleanup'])
@@ -11,13 +11,15 @@ node {
           stage('Static Analysis') {
               sh 'bash .ci/clang_patch'
           }
-            
+          catchError {
           stage('Unit Test') {
               dir ("firmware/ec/test"){ sh 'make ci' }
           }
-          
+          }
+          catchError {
           stage('Firmware Build') {
             dir ('firmware/ec') { sh 'make all' }
+          }
           }
 
       } catch (err) {
