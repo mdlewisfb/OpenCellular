@@ -1,6 +1,6 @@
 node {
   currentBuild.result = 'SUCCESS'
-    withEnv(["UNITY_ROOT=$HOME/Unity", "TOOLCHAIN=$HOME/gcc-arm-none-eabi", "OCWARE_DIR=$WORKSPACE/firmware/ec"]) {
+    withEnv(['UNITY_ROOT=$HOME/Unity', 'TOOLCHAIN=$HOME/gcc-arm-none-eabi', "OCWARE_DIR=./"]) {
       try {
           stage('Checkout') {
             step([$class: 'WsCleanup'])
@@ -17,8 +17,6 @@ node {
           }
           
           stage('Firmware Build') {
-            echo $OCWARE_DIR
-            echo $TOOLCHAIN
             dir ('firmware/ec') { sh 'make all' }
           }
 
