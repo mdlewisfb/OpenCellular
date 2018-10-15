@@ -161,7 +161,6 @@ $(RUNNER_PATH):
 	$(MKDIR) $(RUNNER_PATH)
 	
 clean:
-	@echo $(UNITY_ROOT)
 	rm -rf $(PATHB)
 
 .PHONY: clean
