@@ -82,6 +82,9 @@ endif
 test: $(BUILD_PATHS) $(RESULTS)
 	ruby $(UNITY_ROOT)/auto/unity_test_summary.rb $(PATHR)
 
+junit: test
+	@ruby $(UNITY_ROOT)/auto/stylize_as_junit.rb -r $(PATHR) -o $(PATHR)/unit-test-results.xml
+
 # Note: we force the rebuild of this target each run to ensure fresh results
 $(PATHR)%.testresults: $(PATHB)%$(TARGET_EXTENSION) FORCE
 	-./$< > $@ 2>&1
@@ -168,4 +171,4 @@ clean:
 .PHONY: FORCE
 
 ci: CFLAGS += -Werror
-ci: clean test
+ci: clean junit

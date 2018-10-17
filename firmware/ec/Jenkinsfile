@@ -26,6 +26,8 @@ node {
           }
       } catch (err) {
           currentBuild.result = 'FAILURE'
+      } finally {
+        junit 'firmware/ec/test/build/results/unit-test-results.xml'
       }
           
       try {
@@ -34,7 +36,6 @@ node {
           }
       } catch (err) {
         currentBuild.result = 'FAILURE'
-      }
+      } 
     }
-    archiveArtifact artifacts: 'clang-format.patch', fingerprint: true
 }
