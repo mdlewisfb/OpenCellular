@@ -37,8 +37,7 @@ node {
       } catch (err) {
         currentBuild.result = 'FAILURE'
       } finally {
-        def gccwarn = scanForIssues tool: [$class: 'GnuMakeGcc']
-        publishIssues issues:[gccwarn], unstableTotalAll:1
+        warnings consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']]
       } 
     }
 }
