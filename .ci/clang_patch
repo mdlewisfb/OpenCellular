@@ -1,15 +1,14 @@
 #!/bin/bash
 
-#find . -iname *.h -o -iname *.c -o -iname *.cpp -o -iname *.hpp \
-git --no-pager diff --name-only HEAD origin/master | grep ".\.c$\|.\.h$" \
-    | xargs clang-format -style=file -output-replacements-xml > clang_format.xml
+find . -iname *.h -o -iname *.c -o -iname *.cpp -o -iname *.hpp \
+    | xargs clang-format -style=file -i
 
-#git diff > clang_format.patch
+git diff > clang_format.patch
 
 # Delete if 0 size and exit with 0
-if [ ! -s clang_format.xml ]
+if [ ! -s clang_format.patch ]
 then
-    rm clang_format.xml
+    rm clang_format.patch
     exit 0
 fi
 

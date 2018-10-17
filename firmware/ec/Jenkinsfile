@@ -18,6 +18,8 @@ node {
           }
       } catch (err) {
           currentBuild.result = 'ERROR'
+      } finally {
+        archiveArtifacts 'clang-format.patch'
       }
             
       try {
@@ -27,6 +29,7 @@ node {
       } catch (err) {
           currentBuild.result = 'FAILURE'
       } finally {
+        warnings consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']]
         junit 'firmware/ec/test/build/results/unit-test-results.xml'
       }
           
