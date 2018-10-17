@@ -1,5 +1,5 @@
 node {
-  currentBuild.result = 'SUCCESS'
+  def res = 'SUCCESS'
     withEnv(["UNITY_ROOT=$HOME/Unity", "TOOLCHAIN=$HOME/gcc-arm-none-eabi", "OCWARE_DIR=./"]) {
       try {
           stage('Checkout') {
@@ -17,7 +17,7 @@ node {
               sh 'bash .ci/clang_patch'
           }
       } catch (err) {
-          currentBuild.result = 'ERROR'
+          res = 'ERROR'
           archiveArtifact artifacts: './clang-format.patch', fingerprint: true
       }
             
@@ -26,7 +26,7 @@ node {
               dir ("firmware/ec/test"){ sh 'make ci' }
           }
       } catch (err) {
-          currentBuild.result = 'FAILURE'
+          res = 'FAILURE'
       }
           
       try {
@@ -34,12 +34,12 @@ node {
             dir ('firmware/ec') { sh 'make clean all' }
           }
       } catch (err) {
-        currentBuild.result = 'FAILURE'
+        res = 'FAILURE'
       }
     }
     post {
         always {
-
+            currentBuild.result = res
         }
     }
 }
