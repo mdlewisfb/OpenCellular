@@ -27,8 +27,8 @@ node {
       } catch (err) {
           currentBuild.result = 'FAILURE'
       } finally {
-        junit 'firmware/ec/test/build/results/unit-test-results.xml'
         warnings consoleParsers: [[parserName: 'gcc']]
+        junit 'firmware/ec/test/build/results/unit-test-results.xml'
       }
           
       try {
@@ -37,6 +37,7 @@ node {
           }
       } catch (err) {
         currentBuild.result = 'FAILURE'
+      } finally {
         warnings consoleParsers: [[parserName: 'gcc']]
       } 
     }
