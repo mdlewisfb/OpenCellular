@@ -27,7 +27,6 @@ node {
       } catch (err) {
           currentBuild.result = 'FAILURE'
       } finally {
-        warnings consoleParsers: [[parserName: 'Gcc4']]
         junit 'firmware/ec/test/build/results/unit-test-results.xml'
       }
           
@@ -38,7 +37,8 @@ node {
       } catch (err) {
         currentBuild.result = 'FAILURE'
       } finally {
-        warnings consoleParsers: [[parserName: 'Gcc4']]
+        def gccwarn = scanForIssues tool: [$class: 'GnuMakeGcc']
+        publishIssues issues:[gccwarn], unstableTotalAll:1
       } 
     }
 }
