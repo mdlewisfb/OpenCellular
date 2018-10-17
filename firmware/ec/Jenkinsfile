@@ -7,24 +7,33 @@ node {
             echo 'Checking out SCM'
             checkout scm
           }
+      } catch (err) {
+          currentBuild.result = 'FAILURE'
+          throw err
+      }
 
+      try {
           stage('Static Analysis') {
               sh 'bash .ci/clang_patch'
           }
-          catchError {
+      } catch (err) {
+          currentBuild.result = 'ERROR'
+      }
+            
+      try {
           stage('Unit Test') {
               dir ("firmware/ec/test"){ sh 'make ci' }
           }
-          }
-          catchError {
+      } catch (err) {
+          currentBuild.result = 'FAILURE'
+      }
+          
+      try {
           stage('Firmware Build') {
-            dir ('firmware/ec') { sh 'make all' }
+            dir ('firmware/ec') { sh 'make clean all' }
           }
-          }
-
       } catch (err) {
         currentBuild.result = 'FAILURE'
-        throw err
       }
     }
 }
