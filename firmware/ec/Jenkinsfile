@@ -18,6 +18,7 @@ node {
           }
       } catch (err) {
           currentBuild.result = 'ERROR'
+          archiveArtifact artifacts: './clang-format.patch', fingerprint: true
       }
             
       try {
@@ -35,5 +36,10 @@ node {
       } catch (err) {
         currentBuild.result = 'FAILURE'
       }
+    }
+    post {
+        always {
+
+        }
     }
 }
