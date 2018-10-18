@@ -14,7 +14,7 @@ node {
 
       try {
           stage('Static Analysis') {
-              sh 'bash .ci/clang_patch'
+              dir ('firmware/ec') { sh 'bash ../../.ci/clang_patch' }
           }
       } catch (err) {
           currentBuild.result = 'ERROR'
