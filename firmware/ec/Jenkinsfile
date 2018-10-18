@@ -14,7 +14,7 @@ node {
       } catch (err) {
           currentBuild.result = 'ERROR'
       } finally {
-        archiveArtifacts '**/clang-format.patch'
+        archiveArtifacts '**/clang_format.patch'
       }
             
       try {
