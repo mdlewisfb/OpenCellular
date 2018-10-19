@@ -1,0 +1,20 @@
+node {
+  currentBuild.result = 'SUCCESS'
+    withEnv(["UNITY_ROOT=$HOME/Unity", "TOOLCHAIN=$HOME/gcc-arm-none-eabi", "OCWARE_DIR=./"]) {
+      stage('Checkout') {
+        step([$class: 'WsCleanup'])
+        echo 'Checking out SCM'
+        checkout scm
+      }
+
+      try {
+          stage('Static Analysis') {
+              dir ('firmware/ec') { sh 'bash ../../.ci/clang_patch' }
+          }
+      } catch (err) {
+          currentBuild.result = 'ERROR'
+      } finally {
+        archiveArtifacts '**/clang_format.patch'
+      }
+    }
+}
