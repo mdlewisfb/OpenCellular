@@ -19,12 +19,18 @@ node {
             
       try {
           stage('Unit Test') {
-              dir ("firmware/ec/test"){ sh 'make ci' }
+              dir ("firmware/ec/test"){ 
+                  sh 'make ci'
+                  sh 'python ../../../.ci/coverage.py'
+              }
           }
       } catch (err) {
           currentBuild.result = 'FAILURE'
       } finally {
         junit 'firmware/ec/test/build/results/unit-test-results.xml'
+        step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false,\
+        coberturaReportFile: '**/test-coverage.xml', failUnhealthy: false, failUnstable: false,\
+        maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
       }
           
       try {
