@@ -56,8 +56,9 @@ STD_FILES=$(PATHB)Test_%$(TARGET_EXTENSION):$(UNITY_ROOT)/src/unity.c $(PATHT)/T
 
 # Create the flags to add all individual coverage files
 LCOV_ADD = $(patsubst %,-a %, $(COVERAGE))
+LCOV_ADD += -a $(PATHC)test-base.info
 # The directories to ignore in coverage
-LCOV_IGNORE = "*/test/*" "*/Unity/*"
+LCOV_IGNORE = "*/test/*" "*/Unity/*" "*/ti/*"
 
 #We try to detect the OS we are running on, and adjust commands as needed
 ifeq ($(OS),Windows_NT)
@@ -98,12 +99,15 @@ $(PATHR)%.testresults: $(PATHB)%$(TARGET_EXTENSION) FORCE
 
 $(RUNNER_PATH)Test_%_Runner.c: $(PATHT)Test_%.c
 	ruby $(UNITY_ROOT)/auto/generate_test_runner.rb --suite_setup="extern void suite_setUp(void); suite_setUp();" --suite_teardown="extern void suite_tearDown(void); suite_tearDown(); return num_failures;" $< $@
-	
+
+$(PATHC)test-base.info:
+	@lcov -c -i -d ../ -o $(PATHC)test-base.info
+
 # Get coverage statistics for every test
 $(COVERAGE): $(PATHC)%.info: $(PATHC)/% $(PATHB)%$(TARGET_EXTENSION) $(PATHC) $(BUILD_PATHS) $(RESULTS)
 	@lcov -c -d $< -o $@ > /dev/null
 # Combine all test suites coverage info and remove all files that are not src
-coverage: $(COVERAGE) $(PATHC)
+coverage: $(COVERAGE) $(PATHC) $(PATHC)test-base.info
 	@lcov $(LCOV_ADD) -o $(PATHC)/test-coverage-all.info > /dev/null
 	@lcov --remove $(PATHC)/test-coverage-all.info  $(LCOV_IGNORE) -o $(PATHC)/test-coverage.info
 	

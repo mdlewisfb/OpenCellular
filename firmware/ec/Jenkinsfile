@@ -19,9 +19,9 @@ node {
             
       try {
           stage('Unit Test') {
-              dir ("firmware/ec/test"){ 
-                  sh 'make ci'
-                  sh 'python ../../../.ci/coverage.py'
+              dir ("firmware/ec"){ 
+                  sh 'make test'
+                  sh 'python ../../.ci/coverage.py'
               }
           }
       } catch (err) {
