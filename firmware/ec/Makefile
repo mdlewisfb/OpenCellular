@@ -56,7 +56,7 @@ MAIN_OBJS = $(SRC_FILE:.c=.o)
 
 CC = $(TOOLCHAIN)/bin/arm-none-eabi-gcc
 CFLAGS = -Wall -mcpu=cortex-m4 -mthumb -mabi=aapcs -mapcs-frame @$(OUT)$(CONFIG)/compiler.opt -O3
-CFLAGS += -std=c99 -ffunction-sections -fdata-sections -ftest-coverage
+CFLAGS += -std=c99 -ffunction-sections -fdata-sections
 CFLAGS += -Wextra
 CFLAGS += -Wpointer-arith
 CFLAGS += -Wcast-align
@@ -110,8 +110,12 @@ $(OUT)/OpenCellular.bin: $(OUT)/OpenCellular.out
 clean:
 	-rm -rf *.o *.out *.d *.rov.xs $(OUT) $(MAIN_OBJS)
 
-test: $(MAIN_OBJS)
-	cd test && $(MAKE) ci
+test:
+	cd test && $(MAKE) $(TESTFLAGS)
+
+ci: TESTFLAGS = ci
+ci: CFLAGS += -ftest-coverage 
+ci: all test
 
 .PHONY: all oc_connect1 clean test
 
