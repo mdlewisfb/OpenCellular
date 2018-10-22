@@ -101,15 +101,15 @@ $(RUNNER_PATH)Test_%_Runner.c: $(PATHT)Test_%.c
 	ruby $(UNITY_ROOT)/auto/generate_test_runner.rb --suite_setup="extern void suite_setUp(void); suite_setUp();" --suite_teardown="extern void suite_tearDown(void); suite_tearDown(); return num_failures;" $< $@
 
 $(PATHC)test-base.info:
-	@lcov -c -i -d ../ -o $(PATHC)test-base.info
+	@lcov --rc lcov_branch_coverage=1 -c -i -d ../ -o $(PATHC)test-base.info
 
 # Get coverage statistics for every test
 $(COVERAGE): $(PATHC)%.info: $(PATHC)/% $(PATHB)%$(TARGET_EXTENSION) $(PATHC) $(BUILD_PATHS) $(RESULTS)
-	@lcov -c -d $< -o $@ > /dev/null
+	@lcov --rc lcov_branch_coverage=1 -c -d $< -o $@ > /dev/null
 # Combine all test suites coverage info and remove all files that are not src
 coverage: $(COVERAGE) $(PATHC) $(PATHC)test-base.info
-	@lcov $(LCOV_ADD) -o $(PATHC)/test-coverage-all.info > /dev/null
-	@lcov --remove $(PATHC)/test-coverage-all.info  $(LCOV_IGNORE) -o $(PATHC)/test-coverage.info
+	@lcov --rc lcov_branch_coverage=1 $(LCOV_ADD) -o $(PATHC)/test-coverage-all.info > /dev/null
+	@lcov --rc lcov_branch_coverage=1 --remove $(PATHC)/test-coverage-all.info  $(LCOV_IGNORE) -o $(PATHC)/test-coverage.info
 	
 # Test-specific build rules (add entries here for each new test suite)
 # =============================================================================
