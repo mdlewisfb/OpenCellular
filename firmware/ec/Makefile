@@ -55,7 +55,7 @@ SRC_FILE = $(shell find . -name '*.c' ! -path './test/*' ! -path './$(OUT)*')
 MAIN_OBJS = $(SRC_FILE:.c=.o)
 
 CC = $(TOOLCHAIN)/bin/arm-none-eabi-gcc
-CFLAGS = -Wall -mcpu=cortex-m4 -mthumb -mabi=aapcs -mapcs-frame @$(OUT)$(CONFIG)/compiler.opt -O3
+CFLAGS = -Wall -mcpu=cortex-m4 -mthumb -mabi=aapcs -mapcs-frame @$(OUT)$(CONFIG)/compiler.opt -O0
 CFLAGS += -std=c99 -ffunction-sections -fdata-sections
 CFLAGS += -DTIVAWARE -DPART_$(PART) -DTARGET_IS_TM4C129_RA1 -Dgcc
 CFLAGS += -I$(OCWARE_DIR)/src/ -I$(OCWARE_DIR)/common/ -I$(OCWARE_DIR)/
