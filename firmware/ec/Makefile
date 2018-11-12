@@ -57,6 +57,18 @@ MAIN_OBJS = $(SRC_FILE:.c=.o)
 CC = $(TOOLCHAIN)/bin/arm-none-eabi-gcc
 CFLAGS = -Wall -mcpu=cortex-m4 -mthumb -mabi=aapcs -mapcs-frame @$(OUT)$(CONFIG)/compiler.opt -O3
 CFLAGS += -std=c99 -ffunction-sections -fdata-sections
+CFLAGS += -Wextra
+CFLAGS += -Wpointer-arith
+CFLAGS += -Wcast-align
+CFLAGS += -Wwrite-strings
+CFLAGS += -Wswitch-default
+CFLAGS += -Wunreachable-code
+CFLAGS += -Winit-self
+CFLAGS += -Wno-missing-field-initializers
+CFLAGS += -Wno-unknown-pragmas
+CFLAGS += -Wstrict-prototypes
+CFLAGS += -Wundef
+CFLAGS += -Wold-style-definition
 CFLAGS += -DTIVAWARE -DPART_$(PART) -DTARGET_IS_TM4C129_RA1 -Dgcc
 CFLAGS += -I$(OCWARE_DIR)/src/ -I$(OCWARE_DIR)/common/ -I$(OCWARE_DIR)/
 CFLAGS += -isystem$(XDC_PATH) -isystem$(BIOS_PATH) -isystem$(TIDRIVER_PATH) -isystem$(NDK_PATH) -isystem$(TIVAWARE_DIR)
@@ -99,7 +111,11 @@ clean:
 	-rm -rf *.o *.out *.d *.rov.xs $(OUT) $(MAIN_OBJS)
 
 test:
-	cd test && $(MAKE)
+	cd test && $(MAKE) $(TESTFLAGS)
+
+ci: TESTFLAGS = ci
+ci: CFLAGS += -ftest-coverage 
+ci: all test
 
 .PHONY: all oc_connect1 clean test
 
